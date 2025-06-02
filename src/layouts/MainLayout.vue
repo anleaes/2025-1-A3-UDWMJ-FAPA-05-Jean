@@ -46,53 +46,9 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, watch } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+import { userStore } from 'src/stores/userStore.js'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -103,14 +59,64 @@ export default defineComponent({
 
   data () {
     return {
-      linksList,
-      leftDrawerOpen: false
+      linksList: [
+        {
+          title: 'Github do Projeto',
+          caption: 'LuisGustavoFA/unr-udw-a3-quinta',
+          icon: 'code',
+          link: 'https://github.com/LuisGustavoFA/unr-udw-a3-quinta'
+        },
+        {
+          title: 'Início',
+          caption: 'Página inicial',
+          icon: 'home',
+          link: '#'
+        },
+      ],
+      leftDrawerOpen: false,
     }
+  },
+
+  mounted() {
+    this.checkLogin()
+    watch(
+      () => userStore.user,
+      () => this.checkLogin(),
+      { immediate: false }
+    )
   },
 
   methods: {
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
+    },
+
+    checkLogin() {
+      this.linksList = this.linksList.filter(link =>
+        !['Login', 'Registrar', 'Sair da conta'].includes(link.title)
+      )
+      if (userStore.user) {
+        this.linksList.push({
+          title: 'Sair da conta',
+          caption: userStore.user,
+          icon: 'logout',
+          link: '#/logout'
+        })
+      } else {
+        this.linksList.push({
+          title: 'Login',
+          caption: 'Fazer login',
+          icon: 'login',
+          link: '#/login'
+        },
+        {
+          title: 'Registrar',
+          caption: 'Criar uma conta',
+          icon: 'input',
+          link: '#/register'
+        },
+        )
+      }
     }
   }
 })

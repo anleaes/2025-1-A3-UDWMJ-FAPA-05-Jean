@@ -1,0 +1,36 @@
+<template>
+  <div class="register-content">
+    <h5>Criar uma conta</h5>
+    <LoginForm :type="'CRIAR CONTA'" @cancel="toHome()" @submit="onSubmit"/>
+  </div>
+</template>
+
+<script>
+import LoginForm from 'src/components/LoginForm.vue'
+import { registerUser } from 'src/services/userServices.js'
+
+export default {
+    name: "RegisterPage",
+    components: { LoginForm },
+    methods: {
+        toHome() {
+            this.$router.push('/');
+        },
+        onSubmit(user) {
+          registerUser(user, this.$router)
+        },
+    },
+}
+</script>
+
+<style>
+.register-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10%;
+}
+h5 {
+  margin: 0;
+}
+</style>
