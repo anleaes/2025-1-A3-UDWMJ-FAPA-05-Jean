@@ -10,8 +10,8 @@ const api = axios.create({
 
 export function loginUser(user, router) {
   api.post('/users/login', user)
-    .then(() => {
-      userStore.setUser(user.email)
+    .then((response) => {
+      userStore.setUser(user.email, response.data)
       Notify.create("Login realizado com sucesso!");
       router.push('/');
     })
@@ -32,13 +32,7 @@ export function registerUser(user, router) {
 }
 
 export function logoutUser(router) {
-  api.post('/users/logout')
-    .then(() => {
-      userStore.removeUser();
-      Notify.create("Você saiu da sua conta.");
-      router.push('/');
-    })
-    .catch((err) => {
-      alert('Erro, ' + err.message)
-    })
+  userStore.removeUser();
+  Notify.create("Você saiu da sua conta.");
+  router.push('/');
 }

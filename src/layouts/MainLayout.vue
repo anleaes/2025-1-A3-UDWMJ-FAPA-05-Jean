@@ -72,6 +72,12 @@ export default defineComponent({
           icon: 'home',
           link: '#'
         },
+        {
+          title: 'Clientes',
+          caption: 'Lista de clientes no banco',
+          icon: 'person',
+          link: '#/clientes'
+        },
       ],
       leftDrawerOpen: false,
     }
