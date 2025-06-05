@@ -99,7 +99,7 @@ export default defineComponent({
 
     checkLogin() {
       this.linksList = this.linksList.filter(link =>
-        !['Login', 'Registrar', 'Sair da conta'].includes(link.title)
+        !['Login', 'Registrar', 'Sair da conta', 'Minha conta'].includes(link.title)
       )
       if (userStore.user) {
         this.linksList.push({
@@ -107,7 +107,8 @@ export default defineComponent({
           caption: userStore.user,
           icon: 'logout',
           link: '#/logout'
-        })
+        },
+        )
       } else {
         this.linksList.push({
           title: 'Login',

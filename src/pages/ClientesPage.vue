@@ -1,5 +1,5 @@
 <template>
-  <ClientesCard :clientes :loading/>
+  <ClientesCard :clientes="clientes" :loading="loading"/>
 </template>
 
 <script>
