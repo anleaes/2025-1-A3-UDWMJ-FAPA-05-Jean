@@ -1,10 +1,10 @@
 <template>
-  <ClientesCard :clientes="clientes" :loading="loading"/>
+  <DataCard :data="data" :loading="loading" :type="id"/>
 </template>
 
 <script>
 import axios from 'axios';
-import ClientesCard from 'src/components/ClientesCard.vue';
+import DataCard from 'src/components/DataCard.vue';
 import { defineComponent } from 'vue';
 import { userStore } from 'src/stores/userStore';
 import { Notify } from 'quasar';
@@ -12,29 +12,31 @@ import { Notify } from 'quasar';
 export default defineComponent({
   name: 'IndexPage',
 
-  components: { ClientesCard },
+  components: { DataCard },
 
   data() {
     return {
-      clientes: [],
-      loading: true
+      data: [],
+      loading: true,
+      id: String
     }
   },
 
   mounted() {
-    this.getClientes()
+    this.id = this.$route.params.id
+    this.getData()
   },
 
   methods: {
-    getClientes() {
+    getData() {
       if (userStore.jwt) {
-        axios.get("http://localhost:3000/clientes", {
+        axios.get(`http://localhost:3000/${this.id}`, {
           headers: {
             Authorization: `Bearer ${userStore.jwt}`
           }
         })
         .then((response) => {
-          this.clientes = response.data
+          this.data = response.data
           this.loading = false;
         })
         .catch((error) => {

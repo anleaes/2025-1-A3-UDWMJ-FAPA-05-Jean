@@ -1,12 +1,17 @@
 <template>
   <div class="cards-container" v-if="!loading">
-    <q-card class="q-pa-lg meuCard" v-for="cliente in clientes" v-bind:key="cliente">
-      <q-card-title style="font-size: large;">{{ cliente.nome }} </q-card-title>
+    <q-card class="q-pa-lg meuCard" v-for="dat in data" v-bind:key="dat">
+      <q-card-title style="font-size: large;">{{ dat.nome }} </q-card-title>
       <q-separator size="3px" style="background-color: black;"/>
       <q-card-section>
-        Email: {{ cliente.email }}
-        <br> Celular: {{ cliente.celular }}
-        <br> ID: {{ cliente.id }}
+        <span v-if="type == 'clientes'">
+          Email: {{ dat.email }}
+          <br> Celular: {{ dat.celular }}
+          <br> ID: {{ dat.id }}
+        </span>
+        <span v-if="type == 'categorias'">
+          Descricao: {{ dat.descricao }}
+        </span>
       </q-card-section>
     </q-card>
   </div>
@@ -25,15 +30,22 @@
 
 <script>
   export default {
-    name: "ClientesCard",
+    name: "DataCard",
     props: {
-    clientes: {
+    data: {
       type: Array,
     },
     loading: {
       type: Boolean
+    },
+    type: {
+      type: String
     }
-  }
+    },
+
+    mounted() {
+      console.log(this.data);
+    }
   }
 </script>
 
