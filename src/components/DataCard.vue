@@ -1,17 +1,14 @@
 <template>
   <div class="cards-container" v-if="!loading">
-    <q-card class="q-pa-lg meuCard" v-for="dat in data" v-bind:key="dat">
-      <q-card-title style="font-size: large;">{{ dat.nome }} </q-card-title>
+    <q-card class="q-pa-lg meuCard" v-for="dat in data" :key="dat.ID || dat.id || dat">
+      <q-card-title style="font-size: large;">
+        {{ dat.FIRST_NAME && dat.LAST_NAME ? dat.FIRST_NAME + " " + dat.LAST_NAME : (dat.NAME || 'Registro') }}
+      </q-card-title>
       <q-separator size="3px" style="background-color: black;"/>
       <q-card-section>
-        <span v-if="type == 'clientes'">
-          Email: {{ dat.email }}
-          <br> Celular: {{ dat.celular }}
-          <br> ID: {{ dat.id }}
-        </span>
-        <span v-if="type == 'categorias'">
-          Descricao: {{ dat.descricao }}
-        </span>
+        <div v-for="(value, key) in dat" :key="key">
+          <b>{{ key }}:</b> {{ value }}
+        </div>
       </q-card-section>
     </q-card>
   </div>
@@ -29,22 +26,55 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { userStore } from 'src/stores/userStore';
+import { Notify } from 'quasar';
+
   export default {
     name: "DataCard",
     props: {
-    data: {
-      type: Array,
-    },
-    loading: {
-      type: Boolean
-    },
-    type: {
-      type: String
-    }
+      id: {
+        type: String,
+      },
     },
 
-    mounted() {
-      console.log(this.data);
+    data() {
+      return {
+        data: [],
+        loading: true
+      }
+    },
+
+    watch: {
+      id: {
+        immediate: true,
+        handler() {
+          this.getData();
+        }
+      }
+    },
+
+    methods: {
+      getData() {
+        this.loading = true;
+      if (userStore.jwt) {
+        axios.get(`http://localhost:3000/${this.id}`, {
+          headers: {
+            Authorization: `Bearer ${userStore.jwt}`
+          }
+        })
+        .then((response) => {
+          this.data = response.data
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      } else {
+        console.log("NAO LOGADO");
+        Notify.create("É necessário estar logado para acessar essa página.")
+      }
+    }
     }
   }
 </script>
