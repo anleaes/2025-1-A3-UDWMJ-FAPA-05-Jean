@@ -35,7 +35,7 @@
           v-bind="{
           title: 'Github do Projeto',
           caption: 'LuisGustavoFA/unr-udw-a3-quinta',
-          icon: 'user',
+          icon: 'commit',
           link: 'https://github.com/LuisGustavoFA/unr-udw-a3-quinta'
         }"
         />

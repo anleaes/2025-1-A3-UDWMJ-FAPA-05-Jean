@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md" style="max-width: 600px; width: 100%;">
-    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+    <q-form @submit="onSubmit" class="q-gutter-md">
       <q-input
         filled
         v-model="user.email"
@@ -20,7 +20,7 @@
       />
 
       <div>
-        <q-btn :label="type" type="submit" color="primary"/>
+        <q-btn label="FAZER LOGIN" type="submit" color="primary"/>
         <q-btn label="APAGAR" @click="onCancel" color="primary" flat class="q-ml-sm" />
       </div>
     </q-form>
@@ -47,9 +47,6 @@
             this.$emit('cancel');
           }
         },
-        props: {
-          type: String,
-        }
     }
 </script>
 

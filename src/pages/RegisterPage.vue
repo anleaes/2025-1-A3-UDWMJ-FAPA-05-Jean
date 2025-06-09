@@ -1,17 +1,17 @@
 <template>
   <div class="register-content">
     <h5>Criar uma conta</h5>
-    <LoginForm :type="'CRIAR CONTA'" @cancel="toHome()" @submit="onSubmit"/>
+    <RegisterForm @cancel="toHome()" @submit="onSubmit"/>
   </div>
 </template>
 
 <script>
-import LoginForm from 'src/components/LoginForm.vue'
+import RegisterForm from 'src/components/RegisterForm.vue'
 import { registerUser } from 'src/services/userServices.js'
 
 export default {
     name: "RegisterPage",
-    components: { LoginForm },
+    components: { RegisterForm },
     methods: {
         toHome() {
             this.$router.push('/');
