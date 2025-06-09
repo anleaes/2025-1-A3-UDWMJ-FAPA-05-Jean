@@ -28,7 +28,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10%;
+  padding: 5%;
 }
 h5 {
   margin: 0;

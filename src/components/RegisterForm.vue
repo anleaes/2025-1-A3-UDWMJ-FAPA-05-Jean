@@ -46,7 +46,7 @@
         :rules="[ val => val && val.length > 0 || 'Digite seu Endereco completo']"
       />
 
-      <q-select filled v-model="user.OCI.GENDER" :options="options" label="Genero" />
+      <q-select filled v-model="user.OCI.GENDER" :options="options" label="Genero" hint="Escolha seu genero" />
 
       <q-input
         filled
