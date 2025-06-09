@@ -31,11 +31,21 @@
           Essential Links
         </q-item-label>
 
+        <EssentialLinkExt
+          v-bind="{
+          title: 'Github do Projeto',
+          caption: 'LuisGustavoFA/unr-udw-a3-quinta',
+          icon: 'commit',
+          link: 'https://github.com/LuisGustavoFA/unr-udw-a3-quinta'
+        }"
+        />
+
         <EssentialLink
           v-for="link in linksList"
           :key="link.title"
           v-bind="link"
         />
+
       </q-list>
     </q-drawer>
 
@@ -49,34 +59,25 @@
 import { defineComponent, watch } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { userStore } from 'src/stores/userStore.js'
+import EssentialLinkExt from 'src/components/EssentialLinkExt.vue'
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
-  },
+    EssentialLink,
+    EssentialLinkExt
+},
 
   data () {
     return {
       linksList: [
-        {
-          title: 'Github do Projeto',
-          caption: 'LuisGustavoFA/unr-udw-a3-quinta',
-          icon: 'code',
-          link: 'https://github.com/LuisGustavoFA/unr-udw-a3-quinta'
-        },
+
         {
           title: 'Início',
           caption: 'Página inicial',
           icon: 'home',
-          link: '#'
-        },
-        {
-          title: 'Clientes',
-          caption: 'Lista de clientes no banco',
-          icon: 'person',
-          link: '#/clientes'
+          link: '/'
         },
       ],
       leftDrawerOpen: false,
@@ -99,14 +100,20 @@ export default defineComponent({
 
     checkLogin() {
       this.linksList = this.linksList.filter(link =>
-        !['Login', 'Registrar', 'Sair da conta', 'Minha conta'].includes(link.title)
+        !['Login', 'Registrar-se', 'Sair da conta', 'Minha Página'].includes(link.title)
       )
       if (userStore.user) {
         this.linksList.push({
           title: 'Sair da conta',
           caption: userStore.user,
           icon: 'logout',
-          link: '#/logout'
+          link: '/logout'
+        },
+        {
+          title: 'Minha Página',
+          caption: 'Ver suas informações',
+          icon: 'person',
+          link: '/user'
         },
         )
       } else {
@@ -114,13 +121,13 @@ export default defineComponent({
           title: 'Login',
           caption: 'Fazer login',
           icon: 'login',
-          link: '#/login'
+          link: '/login'
         },
         {
-          title: 'Registrar',
+          title: 'Registrar-se',
           caption: 'Criar uma conta',
           icon: 'input',
-          link: '#/register'
+          link: '/register'
         },
         )
       }

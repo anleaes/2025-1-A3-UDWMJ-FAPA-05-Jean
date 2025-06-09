@@ -1,7 +1,7 @@
 <template>
   <div class="login-content">
     <h5>Fazer login</h5>
-    <LoginForm :type="'LOGIN'" @cancel="toHome()" @submit="onSubmit"/>
+    <LoginForm @cancel="toHome()" @submit="onSubmit"/>
   </div>
 </template>
 
