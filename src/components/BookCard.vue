@@ -8,6 +8,11 @@
           <div class="col text-h6 ellipsis">
             {{ book.TITLE }}
           </div>
+          <div class="row no-wrap items-center">
+            <span class="ellipsis">
+              {{ categorias.join(' | ') }}
+            </span>
+          </div>
         </div>
       </q-card-section>
 
@@ -48,13 +53,15 @@ import axios from 'axios';
     data() {
       return {
         authorName: '',
-        editorName: ''
+        editorName: '',
+        categorias: [],
       }
     },
 
     mounted() {
       this.getAuthor(this.book.AUTHOR_ID);
       this.getEditor(this.book.EDITOR_ID);
+      this.getCategorias(this.book.ID);
     },
 
     methods: {
@@ -100,6 +107,19 @@ import axios from 'axios';
         axios.get(`http://localhost:3000/editoras/${id}`)
           .then((response) => {
             this.editorName = response.data.NAME;
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      },
+      getCategorias(id) {
+        axios.get(`http://localhost:3000/livros/${id}/categorias`)
+          .then((response) => {
+            for (var i = 0; i<response.data.length; i++) {
+              axios.get(`http://localhost:3000/categorias/${response.data[i].CATEGORY_ID}`)
+                .then((response) => this.categorias.push(response.data.NAME))
+                .catch((erro) => console.log(erro))
+            }
           })
           .catch((error) => {
             console.log(error);
