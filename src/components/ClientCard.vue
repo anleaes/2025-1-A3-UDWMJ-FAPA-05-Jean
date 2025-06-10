@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-lg">
+  <div class="q-pa-lg">
     <div class="row items-center q-gutter-md q-mb-md">
       <q-avatar size="56px" color="primary" text-color="white">
         <q-icon name="person" />
@@ -42,7 +42,7 @@
         </q-item-section>
       </q-item>
     </q-list>
-  </q-page>
+  </div>
 </template>
 
 <script>

@@ -1,6 +1,8 @@
 <template>
   <div class="q-pa-md row items-start q-gutter-md">
     <q-card class="my-card-author" flat bordered>
+      <q-img src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg" />
+
       <q-card-section>
         <div class="row no-wrap items-center">
           <div class="col text-h6 ellipsis">
@@ -60,6 +62,6 @@
 
 <style>
 .my-card-author {
-  width: 30vw;
+  width: 20vw;
 }
 </style>

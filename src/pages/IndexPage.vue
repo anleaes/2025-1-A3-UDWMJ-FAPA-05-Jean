@@ -77,5 +77,6 @@ export default defineComponent({
 
 .section {
   display: flex;
+  flex-wrap: wrap
 }
 </style>
