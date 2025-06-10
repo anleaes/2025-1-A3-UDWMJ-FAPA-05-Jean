@@ -1,9 +1,17 @@
 <template>
-  <div class="books-card">
-    <span class="books-card-title">📚Livros:</span>
+  <div class="section-card">
+    <span class="section-card-title">📚Livros:</span>
     <q-separator/>
-    <div class="books">
+    <div class="section">
       <BookCard v-for="book in books" v-bind:key="book" :book="book"/>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <span class="section-card-title">🧑‍🏫Autores:</span>
+    <q-separator/>
+    <div class="section">
+      <AuthorCard v-for="author in authors" v-bind:key="author" :author="author"/>
     </div>
   </div>
 </template>
@@ -11,6 +19,7 @@
 <script>
 import { defineComponent } from 'vue';
 import BookCard from 'src/components/BookCard.vue';
+import AuthorCard from 'src/components/AuthorCard.vue';
 import axios from 'axios';
 
 export default defineComponent({
@@ -18,14 +27,16 @@ export default defineComponent({
 
   data() {
     return {
-      books: []
+      books: [],
+      authors: []
     }
   },
 
-  components: { BookCard },
+  components: { BookCard, AuthorCard },
 
   mounted() {
     this.getBooks()
+    this.getAuthors()
   },
 
   methods: {
@@ -37,23 +48,34 @@ export default defineComponent({
         .catch((error) => {
           console.log(error);
         })
+    },
+    getAuthors() {
+      axios.get(`http://localhost:3000/autores`)
+        .then((response) => {
+          console.log(response.data);
+
+          this.authors = response.data
+        })
+        .catch((error) => {
+          console.log(error);
+        })
     }
   }
 });
 </script>
 
 <style>
-.books-card {
+.section-card {
   display: flex;
   flex-direction: column;
   margin: 16px;
 }
 
-.books-card-title {
+.section-card-title {
   font-size: 32px;
 }
 
-.books {
+.section {
   display: flex;
 }
 </style>
