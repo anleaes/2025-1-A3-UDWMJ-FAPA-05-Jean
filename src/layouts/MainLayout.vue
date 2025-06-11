@@ -100,16 +100,10 @@ export default defineComponent({
 
     checkLogin() {
       this.linksList = this.linksList.filter(link =>
-        !['Login', 'Registrar-se', 'Sair da conta', 'Minha Página'].includes(link.title)
+        !['Login', 'Minha Página'].includes(link.title)
       )
       if (userStore.user) {
         this.linksList.push({
-          title: 'Sair da conta',
-          caption: userStore.user,
-          icon: 'logout',
-          link: '/logout'
-        },
-        {
           title: 'Minha Página',
           caption: 'Ver suas informações',
           icon: 'person',
@@ -122,12 +116,6 @@ export default defineComponent({
           caption: 'Fazer login',
           icon: 'login',
           link: '/login'
-        },
-        {
-          title: 'Registrar-se',
-          caption: 'Criar uma conta',
-          icon: 'input',
-          link: '/register'
         },
         )
       }

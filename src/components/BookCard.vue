@@ -48,6 +48,7 @@
 import { userStore } from 'src/stores/userStore';
 import { Notify } from 'quasar';
 import axios from 'axios';
+import { isBookBorrowed } from 'src/services/borrowServices';
 
   export default {
     name: 'BookCard',
@@ -150,39 +151,7 @@ import axios from 'axios';
       },
 
       async getEmprestimoState() {
-        let found = false;
-        await axios.get(`http://localhost:3000/clientes/email/${userStore.user}`, {
-        headers: { Authorization: `Bearer ${userStore.jwt}` }
-        })
-        .then(async (res) => {
-          await axios.get(`http://localhost:3000/emprestimos/clientes/${res.data.ID}`, {
-            headers: { Authorization: `Bearer ${userStore.jwt}` }
-          })
-          .then(async (respo) => {
-            for (var i = 0; i<respo.data.length; i++) {
-              await axios.get(`http://localhost:3000/emprestimos/itens/${respo.data[i].ID}`, {
-                headers: { Authorization: `Bearer ${userStore.jwt}` }
-              })
-              .then(async (response) => {
-                for (var i = 0; i<response.data.length; i++) {
-                  await axios.get(`http://localhost:3000/livros/${response.data[i].LIVRO_ID}`, {
-                    headers: { Authorization: `Bearer ${userStore.jwt}` }
-                  })
-                  .then((responsee) => {
-                    if (responsee.data.ID == this.book.ID) {
-                      found = true
-                    }
-                  })
-                  .catch((err) => console.log(err))
-                }
-              })
-              .catch((err) => console.log(err))
-            }
-          })
-          .catch((err) => console.log(err))
-        })
-        .catch((err) => console.log(err))
-        this.blank = found
+        this.blank = await isBookBorrowed(this.book.ID)
       }
     }
   }

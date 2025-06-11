@@ -1,6 +1,6 @@
 <template>
   <div class="register-content">
-    <h5>Criar uma conta</h5>
+    <h5>CRIAR UMA CONTA</h5>
     <RegisterForm @cancel="toHome()" @submit="onSubmit"/>
   </div>
 </template>

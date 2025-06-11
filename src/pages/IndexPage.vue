@@ -52,8 +52,6 @@ export default defineComponent({
     getAuthors() {
       axios.get(`http://localhost:3000/autores`)
         .then((response) => {
-          console.log(response.data);
-
           this.authors = response.data
         })
         .catch((error) => {

@@ -14,6 +14,7 @@ import axios from 'axios';
 import { userStore } from 'src/stores/userStore.js'
 import ClientCard from 'src/components/ClientCard.vue'
 import BookCard from 'src/components/BookCard.vue'
+import { getEmprestimosService } from 'src/services/borrowServices.js'
 
 export default {
   name: 'ClientPage',
@@ -26,7 +27,8 @@ export default {
   data() {
     return {
       client: {},
-      books: []
+      books: [],
+      noBooks: null
     }
   },
 
@@ -46,38 +48,9 @@ export default {
       .catch((err) => console.log(err))
     },
 
-    getEmprestimos() {
-      axios.get(`http://localhost:3000/clientes/email/${userStore.user}`, {
-        headers: { Authorization: `Bearer ${userStore.jwt}` }
-      })
-      .then((res) => {
-        axios.get(`http://localhost:3000/emprestimos/clientes/${res.data.ID}`, {
-          headers: { Authorization: `Bearer ${userStore.jwt}` }
-        })
-        .then((respo) => {
-          for (var i = 0; i<respo.data.length; i++) {
-            axios.get(`http://localhost:3000/emprestimos/itens/${respo.data[i].ID}`, {
-              headers: { Authorization: `Bearer ${userStore.jwt}` }
-            })
-            .then((response) => {
-              for (var i = 0; i<response.data.length; i++) {
-                axios.get(`http://localhost:3000/livros/${response.data[i].LIVRO_ID}`, {
-                  headers: { Authorization: `Bearer ${userStore.jwt}` }
-                })
-                .then((responsee) => {
-                  console.log(responsee.data);
-                  this.books.push(responsee.data)
-                })
-                .catch((err) => console.log(err))
-              }
-            })
-            .catch((err) => console.log(err))
-          }
-        })
-        .catch((err) => console.log(err))
-      })
-      .catch((err) => console.log(err))
-
+    async getEmprestimos() {
+      this.books = await getEmprestimosService();
+      console.log(this.books);
 
     }
   },
