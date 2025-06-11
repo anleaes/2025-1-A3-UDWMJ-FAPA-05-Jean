@@ -34,6 +34,29 @@ export async function getLivrosEmprestados() {
   return books;
 }
 
+export async function addEmprestimo(bookID) {
+  let emprestimoID = null
+  api.get(`/clientes/email/${userStore.user}`)
+  .then((res) => {
+    api.post(`/emprestimos`, {
+      STATUS: "Em andamento",
+      CLIENTE_ID: res.data.ID
+    })
+    .then((res) => {
+      api.post(`/emprestimos/itens`, {
+        EMPRESTIMO_ID: res.data.id,
+        LIVRO_ID: bookID
+      })
+      .then((res) => {
+        emprestimoID = res.data.id;
+      })
+      .catch((erro) => console.log(erro))
+    })
+    .catch((erro) => console.log(erro))
+  })
+  return emprestimoID;
+}
+
 export async function getEmprestimoID(id) {
   let emprestimoId = null;
   await api.get(`/clientes/email/${userStore.user}`)
