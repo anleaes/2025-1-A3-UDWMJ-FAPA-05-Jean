@@ -28,9 +28,17 @@
       <q-separator />
 
       <q-card-actions>
-        <q-btn flat color="primary" @click="onBorrow()">
-          Fazer empréstimo
-        </q-btn>
+        <div v-if="blank != null">
+          <q-btn flat style="color: gray;" v-if="blank == true">
+            Emprestado
+          </q-btn>
+          <q-btn flat color="primary" @click="onBorrow()" v-else>
+            Fazer empréstimo
+          </q-btn>
+        </div>
+        <div v-else>
+          <q-skeleton type="text" width="120px" height="36px"/>
+        </div>
       </q-card-actions>
     </q-card>
   </div>
@@ -40,6 +48,7 @@
 import { userStore } from 'src/stores/userStore';
 import { Notify } from 'quasar';
 import axios from 'axios';
+import { isBookBorrowed } from 'src/services/borrowServices';
 
   export default {
     name: 'BookCard',
@@ -55,6 +64,7 @@ import axios from 'axios';
         authorName: '',
         editorName: '',
         categorias: [],
+        blank: null
       }
     },
 
@@ -62,38 +72,50 @@ import axios from 'axios';
       this.getAuthor(this.book.AUTHOR_ID);
       this.getEditor(this.book.EDITOR_ID);
       this.getCategorias(this.book.ID);
+      this.getEmprestimoState()
     },
 
     methods: {
       onBorrow() {
         if (userStore.user) {
-          axios.post(`http://localhost:3000/emprestimos`, {
-            STATUS: "Em andamento",
-            CLIENTE_ID: 1
-          }, {
+          axios.get(`http://localhost:3000/clientes/email/${userStore.user}`, {
             headers: {
               Authorization: `Bearer ${userStore.jwt}`
             }
           })
-          .then((response)=> {
-            axios.post(`http://localhost:3000/emprestimos/itens`, {
-              EMPRESTIMO_ID: response.data.id,
-		          LIVRO_ID: this.book.ID
+          .then((res) => {
+            axios.post(`http://localhost:3000/emprestimos`, {
+              STATUS: "Em andamento",
+              CLIENTE_ID: res.data.ID
             }, {
               headers: {
                 Authorization: `Bearer ${userStore.jwt}`
               }
             })
-            .then((response) => console.log(response))
+            .then((respo)=> {
+              axios.post(`http://localhost:3000/emprestimos/itens`, {
+                EMPRESTIMO_ID: respo.data.id,
+                LIVRO_ID: this.book.ID
+              }, {
+                headers: {
+                  Authorization: `Bearer ${userStore.jwt}`
+                }
+              })
+              .then((response) => {
+                console.log(response);
+                Notify.create("Emprestimo realizado com sucesso!");
+                this.blank = true;
+              })
+              .catch((erro) => console.log(erro))
+            })
             .catch((erro) => console.log(erro))
           })
-          .catch((erro) => console.log(erro))
-
         } else {
           Notify.create("É necessario estar logado para realizar essa ação!")
           this.$router.push("/login")
         }
       },
+
       getAuthor(id) {
         axios.get(`http://localhost:3000/autores/${id}`)
           .then((response) => {
@@ -103,6 +125,7 @@ import axios from 'axios';
             console.log(error);
           })
       },
+
       getEditor(id) {
         axios.get(`http://localhost:3000/editoras/${id}`)
           .then((response) => {
@@ -112,6 +135,7 @@ import axios from 'axios';
             console.log(error);
           })
       },
+
       getCategorias(id) {
         axios.get(`http://localhost:3000/livros/${id}/categorias`)
           .then((response) => {
@@ -124,6 +148,10 @@ import axios from 'axios';
           .catch((error) => {
             console.log(error);
           })
+      },
+
+      async getEmprestimoState() {
+        this.blank = await isBookBorrowed(this.book.ID)
       }
     }
   }
