@@ -8,7 +8,7 @@ const api = axios.create({
   }
 })
 
-export async function getEmprestimosService() {
+export async function getLivrosEmprestados() {
   let books = []
   await api.get(`/clientes/email/${userStore.user}`)
       .then(async (res) => {
@@ -34,38 +34,26 @@ export async function getEmprestimosService() {
   return books;
 }
 
-export async function isBookBorrowed(id) {
-  let found = false;
-    await axios.get(`http://localhost:3000/clientes/email/${userStore.user}`, {
-    headers: { Authorization: `Bearer ${userStore.jwt}` }
-    })
-    .then(async (res) => {
-      await axios.get(`http://localhost:3000/emprestimos/clientes/${res.data.ID}`, {
-        headers: { Authorization: `Bearer ${userStore.jwt}` }
-      })
-      .then(async (res) => {
-        for (var i = 0; i<res.data.length; i++) {
-          await axios.get(`http://localhost:3000/emprestimos/itens/${res.data[i].ID}`, {
-            headers: { Authorization: `Bearer ${userStore.jwt}` }
-          })
-          .then(async (res) => {
-            for (var i = 0; i<res.data.length; i++) {
-              await axios.get(`http://localhost:3000/livros/${res.data[i].LIVRO_ID}`, {
-                headers: { Authorization: `Bearer ${userStore.jwt}` }
-              })
-              .then((res) => {
-                if (res.data.ID == id) {
-                  found = true
-                }
-              })
-              .catch((err) => console.log(err))
+export async function getEmprestimoID(id) {
+  let emprestimoId = null;
+  await api.get(`/clientes/email/${userStore.user}`)
+  .then(async (resCliente) => {
+    await api.get(`/emprestimos/clientes/${resCliente.data.ID}`)
+    .then(async (resEmprestimos) => {
+      for (let i = 0; i < resEmprestimos.data.length; i++) {
+        await api.get(`/emprestimos/itens/${resEmprestimos.data[i].ID}`)
+        .then((resItens) => {
+          for (let j = 0; j < resItens.data.length; j++) {
+            if (resItens.data[j].LIVRO_ID === id) {
+              emprestimoId = resEmprestimos.data[i].ID;
             }
-          })
-          .catch((err) => console.log(err))
-        }
-      })
-      .catch((err) => console.log(err))
+          }
+        })
+        .catch((err) => console.log(err));
+      }
     })
-    .catch((err) => console.log(err))
-  return found
+    .catch((err) => console.log(err));
+  })
+  .catch((err) => console.log(err));
+  return emprestimoId;
 }

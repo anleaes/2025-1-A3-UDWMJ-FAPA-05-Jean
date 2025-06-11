@@ -14,7 +14,7 @@ import axios from 'axios';
 import { userStore } from 'src/stores/userStore.js'
 import ClientCard from 'src/components/ClientCard.vue'
 import BookCard from 'src/components/BookCard.vue'
-import { getEmprestimosService } from 'src/services/borrowServices.js'
+import { getLivrosEmprestados } from 'src/services/borrowServices.js'
 
 export default {
   name: 'ClientPage',
@@ -34,7 +34,7 @@ export default {
 
   mounted() {
     this.getClient();
-    this.getEmprestimos();
+    this.getBooks();
   },
 
   methods: {
@@ -48,10 +48,8 @@ export default {
       .catch((err) => console.log(err))
     },
 
-    async getEmprestimos() {
-      this.books = await getEmprestimosService();
-      console.log(this.books);
-
+    async getBooks() {
+      this.books = await getLivrosEmprestados();
     }
   },
 }
