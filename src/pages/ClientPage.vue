@@ -1,5 +1,5 @@
 <template>
-  <ClientCard :client />
+  <ClientCard :client/>
   <div class="section-card">
     <span class="section-card-title">📚Livros emprestados para {{ client.FIRST_NAME }} {{ client.LAST_NAME }}:</span>
     <q-separator/>
@@ -50,7 +50,7 @@ export default {
 
     async getBooks() {
       this.books = await getLivrosEmprestados();
-    }
+    },
   },
 }
 </script>
