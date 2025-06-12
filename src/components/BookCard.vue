@@ -89,7 +89,16 @@ import { getEmprestimoID, addEmprestimo } from 'src/services/borrowServices.js'
           $q.dialog({
             title: 'Empréstimo',
             message: 'Deseja realizar um empréstimo deste livro?',
-            cancel: true,
+            ok: {
+              flat: true,
+              label: 'Confirmar',
+              push: true
+            },
+            cancel: {
+              flat: true,
+              label: 'Cancelar',
+              push: true
+            },
             persistent: true
           }).onOk(() => {
             res();
@@ -104,7 +113,16 @@ import { getEmprestimoID, addEmprestimo } from 'src/services/borrowServices.js'
           $q.dialog({
             title: 'Devolver',
             message: 'Deseja retornar este livro?',
-            cancel: true,
+            ok: {
+              flat: true,
+              label: 'Confirmar',
+              push: true
+            },
+            cancel: {
+              flat: true,
+              label: 'Cancelar',
+              push: true
+            },
             persistent: true
           }).onOk(() => {
             res();
