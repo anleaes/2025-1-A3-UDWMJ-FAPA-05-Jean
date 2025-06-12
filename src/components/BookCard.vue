@@ -9,8 +9,11 @@
             {{ book.TITLE }}
           </div>
           <div class="row no-wrap items-center">
-            <span class="ellipsis">
+            <span class="ellipsis" v-if="categorias.length > 0">
               {{ categorias.join(' | ') }}
+            </span>
+            <span class="ellipsis" v-else>
+              <q-skeleton type="text" class="text-h6" width="120px"/>
             </span>
           </div>
         </div>
@@ -130,18 +133,20 @@ import { getEmprestimoID, addEmprestimo } from 'src/services/borrowServices.js'
         });
     },
 
-    getCategorias(id) {
-      axios.get(`http://localhost:3000/livros/${id}/categorias`)
-        .then((response) => {
+    async getCategorias(id) {
+      let tempCategorias = [];
+      await axios.get(`http://localhost:3000/livros/${id}/categorias`)
+        .then(async (response) => {
           for (var i = 0; i < response.data.length; i++) {
-            axios.get(`http://localhost:3000/categorias/${response.data[i].CATEGORY_ID}`)
-              .then((response) => this.categorias.push(response.data.NAME))
+            await axios.get(`http://localhost:3000/categorias/${response.data[i].CATEGORY_ID}`)
+              .then(async (response) => await tempCategorias.push(response.data.NAME))
               .catch((erro) => console.log(erro));
           }
         })
         .catch((error) => {
           console.log(error);
         });
+      this.categorias = tempCategorias;
     },
 
     async getEmprestimoState() {
@@ -159,7 +164,5 @@ import { getEmprestimoID, addEmprestimo } from 'src/services/borrowServices.js'
 </script>
 
 <style>
-.my-card {
-  width: 20vw;
-}
+
 </style>
