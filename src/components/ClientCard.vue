@@ -54,7 +54,7 @@
         <q-item-section>
           <q-item-label>Gênero</q-item-label>
           <q-item-label caption>{{ tempGender }}</q-item-label>
-        <q-select :options="['M', 'F', 'O']" v-if="genderEdit" v-model="genderField" label="Novo gênero"></q-select>
+        <q-select :options="['Masculino', 'Feminino', 'Outro']" v-if="genderEdit" v-model="genderField" label="Novo gênero"></q-select>
         </q-item-section>
         <div class="editing" v-if="genderEdit">
           <q-item-section ><q-btn title="Salvar" class="save-btn" flat round icon="save" @click="editGender()"/></q-item-section>
@@ -100,7 +100,7 @@ export default {
         if (newClient) {
           this.tempPhone = newClient.CELL_PHONE;
           this.tempAddress = newClient.ADDRESS;
-          this.tempGender = newClient.GENDER;
+          this.tempGender = newClient.GENDER == 'M' ? 'Masculino' : newClient.GENDER == 'F' ? 'Feminino' : newClient.GENDER == 'O' ? 'Outro' : newClient.GENDER;
         }
       }
     }
@@ -128,7 +128,7 @@ export default {
     },
 
     editAddress() {
-      if (this.phoneField == '') {
+      if (this.addressField == '') {
         Notify.create("Campo de edição precisa ter algo escrito!")
       } else {
         axios.patch(`http://localhost:3000/clientes/${this.client.ID}`, {
@@ -148,12 +148,12 @@ export default {
     },
 
     editGender() {
-      if (this.phoneField == '') {
+      if (this.genderField == '') {
         Notify.create("Campo de edição precisa ter algo selecionado!")
       } else {
         axios.patch(`http://localhost:3000/clientes/${this.client.ID}`, {
           field: 'GENDER',
-          value: this.genderField
+          value: this.genderField == 'Masculino' ? 'M' : this.genderField == 'Feminino' ? 'F' : this.genderField == 'Outro' ? 'O' : this.genderField
         }, {
           headers: { Authorization: `Bearer ${userStore.jwt}` }
         })

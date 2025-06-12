@@ -1,16 +1,24 @@
 <template>
-  <div class="section-card">
+  <div class="section-card" v-if="books.length >= 1">
     <span class="section-card-title">📚Livros:</span>
     <q-separator/>
-    <div class="section">
+    <div class="section-card-books">
       <BookCard v-for="book in books" v-bind:key="book" :book="book"/>
+    </div>
+  </div>
+
+  <div class="section-card" v-else>
+    <span class="section-card-title">📚Livros:</span>
+    <q-separator/>
+    <div class="section-card-books">
+      <BookCardSkeleton v-for="num in 6" v-bind:key="num" />
     </div>
   </div>
 
   <div class="section-card">
     <span class="section-card-title">🧑‍🏫Autores:</span>
     <q-separator/>
-    <div class="section">
+    <div class="section-card-books">
       <AuthorCard v-for="author in authors" v-bind:key="author" :author="author"/>
     </div>
   </div>
@@ -20,6 +28,7 @@
 import { defineComponent } from 'vue';
 import BookCard from 'src/components/BookCard.vue';
 import AuthorCard from 'src/components/AuthorCard.vue';
+import BookCardSkeleton from 'src/components/BookCardSkeleton.vue';
 import axios from 'axios';
 
 export default defineComponent({
@@ -32,7 +41,7 @@ export default defineComponent({
     }
   },
 
-  components: { BookCard, AuthorCard },
+  components: { BookCard, AuthorCard, BookCardSkeleton },
 
   mounted() {
     this.getBooks()
@@ -73,8 +82,8 @@ export default defineComponent({
   font-size: 32px;
 }
 
-.section {
+.section-card-books {
   display: flex;
-  flex-wrap: wrap
+  flex-wrap: wrap;
 }
 </style>
