@@ -122,6 +122,7 @@ export default {
           this.tempPhone = this.phoneField
           this.phoneEdit = false
           this.phoneField = '';
+          Notify.create("Celular alterado com sucesso!")
         })
         .catch((err) => console.log(err))
       }
@@ -142,6 +143,7 @@ export default {
           this.tempAddress = this.addressField
           this.addressEdit = false
           this.addressField = '';
+          Notify.create("Endereço alterado com sucesso!")
         })
         .catch((err) => console.log(err))
       }
@@ -162,6 +164,7 @@ export default {
           this.tempGender = this.genderField
           this.genderEdit = false
           this.genderField = '';
+          Notify.create("Gênero alterado com sucesso!")
         })
         .catch((err) => console.log(err))
       }

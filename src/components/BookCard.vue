@@ -1,11 +1,11 @@
 <template>
   <div class="q-pa-md row items-start q-gutter-md">
     <q-card class="my-card" flat bordered>
-      <q-img src="https://uyc.thecenterforsalesstrategy.com/hs-fs/hubfs/21%20Books%20on%20Our%20Shelves%20for%20Personal%20and%20Professional%20Development.png?width=1600&name=21%20Books%20on%20Our%20Shelves%20for%20Personal%20and%20Professional%20Development.png" />
+      <q-img src="https://cnm.org.br/cms/images/stories/comunicacao_novo/educacao/05012016_livros_MRE.jpg" />
 
       <q-card-section>
         <div class="row no-wrap items-center">
-          <div class="col text-h6 ellipsis">
+          <div :title="book.TITLE" class="col text-h6 ellipsis">
             {{ book.TITLE }}
           </div>
           <div class="row no-wrap items-center">
@@ -80,11 +80,11 @@ import { getEmprestimoID, addEmprestimo } from 'src/services/borrowServices.js'
     },
 
     methods: {
-    onBorrow() {
+    async onBorrow() {
       if (userStore.user) {
-        let emprestimo_id = addEmprestimo(this.book.ID)
+        let emprestimo_id = await addEmprestimo(this.book.ID)
         if (emprestimo_id) {
-          Notify.create('Livro emprestado com sucesso!')
+          Notify.create('Empréstimo realizado com sucesso!')
           this.emprestado = true;
           this.emprestimoID = emprestimo_id
         } else {
@@ -105,7 +105,7 @@ import { getEmprestimoID, addEmprestimo } from 'src/services/borrowServices.js'
       .then(() => {
         Notify.create("Livro devolvido com sucesso!");
         this.emprestado = false;
-        this.emprestimoId = null;
+        this.emprestimoID = null;
       })
       .catch((error) => {
         console.log(error);

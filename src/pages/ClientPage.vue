@@ -1,5 +1,5 @@
 <template>
-  <ClientCard :client/>
+  <ClientCard :client="client"/>
   <div class="section-card">
     <span class="section-card-title">📚Livros emprestados para {{ client.FIRST_NAME }} {{ client.LAST_NAME }}:</span>
     <q-separator/>
@@ -10,7 +10,7 @@
       <BookCard v-for="book in books" :key="book.ID" :book="book" />
     </div>
     <div v-else>
-      <span class="q-pa-md text-h6">Nenhum livro emprestado.</span>
+      <span class="q-pa-md text-h6">Nenhum empréstimo encontrado.</span>
     </div>
   </div>
 </template>
