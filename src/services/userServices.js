@@ -16,7 +16,7 @@ export function loginUser(user, router) {
       router.push('/');
     })
     .catch((err) => {
-      alert('Erro, ' + err.message)
+      Notify.create('Credenciais incorretas! ERRO: ' + err.message)
     })
 }
 
