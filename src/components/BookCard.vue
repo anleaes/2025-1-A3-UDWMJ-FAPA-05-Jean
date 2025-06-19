@@ -219,10 +219,14 @@ import { getEmprestimoID, addEmprestimo } from 'src/services/borrowServices.js'
     },
 
     async getEmprestimoState() {
-      let emprestimo_id = await getEmprestimoID(this.book.ID);
-      if (emprestimo_id) {
-        this.emprestado = true;
-        this.emprestimoID = emprestimo_id
+      if (userStore.user != null) {
+        let emprestimo_id = await getEmprestimoID(this.book.ID);
+        if (emprestimo_id) {
+          this.emprestado = true;
+          this.emprestimoID = emprestimo_id
+        } else {
+          this.emprestado = false;
+        }
       } else {
         this.emprestado = false;
       }
