@@ -4,9 +4,18 @@ const api = axios.create({
   baseURL: 'http://localhost:3000',
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${userStore.jwt}`
   }
 })
+
+api.interceptors.request.use((config) => {
+  const jwt = userStore.jwt;
+  if (jwt) {
+    config.headers.Authorization = `Bearer ${jwt}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
 
 export async function getLivrosEmprestados() {
   let books = []
